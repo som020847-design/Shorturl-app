@@ -214,3 +214,72 @@ body::before {
 }
 .pixel-corner::before { top: -4px; left: -4px; }
 .pixel-corner::after { bottom: -4px; right: -4px; }
+
+/* ===== Animated Background ===== */
+
+
+
+.floating-flower {
+  position: fixed;
+  bottom: 0;
+  right: 8%;
+  width: 80px;
+  animation: sway 3s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes sway {
+  0% { transform: rotate(-2deg); }
+  100% { transform: rotate(2deg); }
+}
+
+
+/* ===== ดอกไม้ ===== */
+
+.flower {
+  position: absolute;
+  width: 18px; /* เล็กลง */
+  opacity: 0.5;
+}
+
+.pixel-logo {
+  font-family: 'Press Start 2P', monospace;
+  letter-spacing: 3px;
+}
+.glass-card {
+  padding: 20px !important;
+}
+.pixel-popup {
+  background: white;
+  padding: 16px 40px;
+  border: 3px solid black;
+  display: inline-block;
+  animation: floatUp 3s ease-in-out infinite alternate;
+}
+
+@keyframes floatUp {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-8px); }
+}
+.hero-section {
+  background: #f4f4f4;
+  padding: 120px 20px;
+}
+
+.form-section {
+  background: #ffffff;
+  padding: 80px 20px;
+  border-top: 4px solid black;
+}
+
+.history-section {
+  background: #fdf0f5;
+  padding: 80px 20px;
+}
+.hero-description {
+  max-width: 520px;
+  margin: 20px auto;
+  line-height: 1.8;
+  font-size: 16px;
+  color: #555;
+}

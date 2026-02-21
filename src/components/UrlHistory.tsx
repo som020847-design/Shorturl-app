@@ -56,7 +56,7 @@ export default function UrlHistory() {
         {/* Header */}
         <div
           className="flex items-center justify-between px-4 py-3 mb-4"
-          style={{ background: '#111' }}
+          style={{ background: '#ff4da6' }}
         >
           <h2
             className="pixel-font text-white"
@@ -115,7 +115,7 @@ export default function UrlHistory() {
             {urls.map((item, i) => (
               <div
                 key={item.id}
-                className="glass-card p-4"
+                className="glass-card p-4 overflow-hidden"
                 style={{
                   display: 'grid',
                   gridTemplateColumns:
@@ -147,10 +147,11 @@ export default function UrlHistory() {
                   </div>
 
                   <p
-                    className="text-xs truncate"
+                    className="text-xs break-all overflow-hidden"
                     style={{
                       color: 'var(--text-tertiary)',
                       fontSize: '0.7rem',
+                      wordBreak: 'break-word',
                     }}
                   >
                     {item.fullUrl}
@@ -254,4 +255,5 @@ export default function UrlHistory() {
       )}
     </>
   )
-}
+} 
+

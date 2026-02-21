@@ -57,7 +57,7 @@ export default function Hero() {
           <span
             className="inline-block px-4 py-2 text-white"
             style={{
-              background: '#111',
+              background: '#ff69b4',
               fontFamily: 'Press Start 2P, monospace',
               fontSize: '0.5rem',
               letterSpacing: '0.1em',

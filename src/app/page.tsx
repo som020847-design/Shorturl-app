@@ -13,14 +13,26 @@ export default function Home() {
   const handleNewUrl = () => setRefreshKey(k => k + 1)
 
   return (
-    <main className="relative min-h-screen z-10">
-      <Hero />
+    <main className="relative min-h-screen overflow-x-hidden">
 
-      {/* Content wrapper — กึ่งกลาง ไม่เต็มจอ */}
-      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '0 24px 80px' }}>
+      {/* HERO SECTION (เต็มตาม Hero component) */}
+      <section>
+        <Hero />
+      </section>
+
+      {/* CONTENT WRAPPER — กึ่งกลาง ไม่เต็มจอ */}
+      <section className="w-full max-w-[720px] mx-auto px-5 sm:px-8 pb-32">
+
         <ShortenForm onSuccess={handleNewUrl} />
-        {isSignedIn && <UrlHistory key={refreshKey} />}
-      </div>
+
+        {isSignedIn && (
+          <div className="mt-10">
+            <UrlHistory key={refreshKey} />
+          </div>
+        )}
+
+      </section>
+
     </main>
   )
 }
