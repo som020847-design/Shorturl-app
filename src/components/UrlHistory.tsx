@@ -18,80 +18,172 @@ export default function UrlHistory() {
   const [loading, setLoading] = useState(true)
   const [selectedId, setSelectedId] = useState<string | null>(null)
 
+  // ✅ ป้องกัน window error ตอน build
+  const baseUrl =
+    typeof window !== 'undefined' ? window.location.origin : ''
+
   useEffect(() => {
     fetch('/api/urls')
       .then(r => r.json())
       .then(data => { setUrls(data); setLoading(false) })
-      .catch(() => { toast.error('โหลดประวัติไม่ได้'); setLoading(false) })
+      .catch(() => { toast.error('Failed to load history'); setLoading(false) })
   }, [])
 
   const copyToClipboard = (slug: string) => {
-    navigator.clipboard.writeText(`${window.location.origin}/r/${slug}`)
-    toast.success('คัดลอกแล้ว!')
+    navigator.clipboard.writeText(`${baseUrl}/r/${slug}`)
+    toast.success('Copied!')
   }
 
   const formatDate = (d: string) =>
-    new Date(d).toLocaleDateString('th-TH', {
-      day: 'numeric', month: 'short', year: '2-digit',
-      hour: '2-digit', minute: '2-digit',
+    new Date(d).toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'short',
+      year: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
     })
 
   return (
     <>
-      <div className="mt-10 animate-fade-up-delay-5">
-        <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center gap-3">
-            <div className="w-1 h-6 rounded-full btn-gold" />
-            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.6rem', fontWeight: 400 }}>
-              ประวัติการย่อ URL
-            </h2>
-          </div>
-          <span className="tag-mono text-xs text-[var(--text-secondary)] glass-card px-3 py-1 rounded-full">
-            {urls.length} รายการ
+      <div className="mt-10 max-w-3xl mx-auto px-6 pb-24 animate-fade-up-delay-5">
+        <div className="flex items-center justify-between mb-6">
+          <h2
+            className="pixel-font"
+            style={{ fontSize: '0.75rem', color: '#111' }}
+          >
+            URL HISTORY
+          </h2>
+          <span
+            className="pixel-font px-3 py-1.5"
+            style={{
+              fontSize: '0.45rem',
+              border: '2px solid #111',
+              boxShadow: '2px 2px 0 #111',
+              color: '#111',
+            }}
+          >
+            {urls.length} LINKS
           </span>
         </div>
 
         {loading ? (
-          <div className="glass-card rounded-2xl p-12 text-center">
-            <div className="w-8 h-8 rounded-full border-2 border-[var(--gold)] border-t-transparent animate-spin mx-auto" />
+          <div
+            className="p-12 text-center"
+            style={{ border: '2px solid #111', boxShadow: '4px 4px 0 #111' }}
+          >
+            <div
+              className="w-8 h-8 border-4 border-t-transparent animate-spin mx-auto"
+              style={{ borderColor: '#ff2d78', borderTopColor: 'transparent' }}
+            />
           </div>
         ) : urls.length === 0 ? (
-          <div className="glass-card rounded-2xl p-12 text-center">
-            <p className="text-[var(--text-secondary)] text-sm">ยังไม่มีประวัติการย่อ URL</p>
+          <div
+            className="p-12 text-center"
+            style={{ border: '2px solid #111', boxShadow: '4px 4px 0 #111' }}
+          >
+            <p
+              className="pixel-font"
+              style={{ fontSize: '0.55rem', color: 'var(--text-secondary)' }}
+            >
+              NO LINKS YET. CREATE YOUR FIRST ONE!
+            </p>
           </div>
         ) : (
           <div className="space-y-3">
             {urls.map((item, i) => (
-              <div key={item.id} className="glass-card rounded-xl p-4 flex items-center gap-4">
-                <span className="tag-mono text-xs text-[var(--text-secondary)] opacity-40 w-5 text-center shrink-0">
+              <div
+                key={item.id}
+                className="glass-card p-4 flex items-center gap-4"
+              >
+                <span
+                  className="pixel-font opacity-30 shrink-0"
+                  style={{
+                    fontSize: '0.45rem',
+                    width: '20px',
+                    textAlign: 'center',
+                  }}
+                >
                   {String(i + 1).padStart(2, '0')}
                 </span>
+
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[var(--gold)] tag-mono text-xs font-medium">/r/{item.slug}</span>
-                    <span className="text-[var(--text-secondary)] opacity-30">·</span>
-                    <span className="flex items-center gap-1 text-xs text-[var(--text-secondary)] opacity-60">
+                    <span
+                      className="pixel-font"
+                      style={{
+                        fontSize: '0.5rem',
+                        color: 'var(--accent)',
+                      }}
+                    >
+                      /r/{item.slug}
+                    </span>
+                    <span style={{ color: 'var(--text-tertiary)' }}>·</span>
+                    <span
+                      className="flex items-center gap-1 text-xs"
+                      style={{
+                        color: 'var(--text-tertiary)',
+                        fontSize: '0.7rem',
+                      }}
+                    >
                       <Clock size={10} />
                       {formatDate(item.createdAt)}
                     </span>
                   </div>
-                  <p className="text-xs text-[var(--text-secondary)] truncate opacity-70">{item.fullUrl}</p>
+
+                  <p
+                    className="text-xs truncate"
+                    style={{ color: 'var(--text-tertiary)' }}
+                  >
+                    {item.fullUrl}
+                  </p>
                 </div>
-                <div className="flex items-center gap-1.5 shrink-0 glass-card px-3 py-1.5 rounded-lg">
-                  <MousePointerClick size={12} className="text-[var(--gold)]" />
-                  <span className="tag-mono text-xs">{item.clicks}</span>
+
+                <div
+                  className="flex items-center gap-1.5 shrink-0 px-3 py-1.5"
+                  style={{
+                    border: '2px solid #111',
+                    boxShadow: '2px 2px 0 #111',
+                  }}
+                >
+                  <MousePointerClick size={12} style={{ color: 'var(--accent)' }} />
+                  <span
+                    className="pixel-font"
+                    style={{ fontSize: '0.45rem' }}
+                  >
+                    {item.clicks}
+                  </span>
                 </div>
+
                 <div className="flex items-center gap-1 shrink-0">
-                  <button onClick={() => copyToClipboard(item.slug)}
-                    className="p-2 text-[var(--text-secondary)] hover:text-[var(--gold)] transition-colors rounded-lg hover:bg-[rgba(201,168,76,0.1)]">
+                  {/* Copy */}
+                  <button
+                    onClick={() => copyToClipboard(item.slug)}
+                    className="p-2 transition-colors hover:bg-gray-100"
+                    style={{ color: 'var(--text-secondary)' }}
+                    title="Copy"
+                  >
                     <Copy size={13} />
                   </button>
-                  <a href={`${window.location.origin}/r/${item.slug}`} target="_blank" rel="noopener noreferrer"
-                    className="p-2 text-[var(--text-secondary)] hover:text-[var(--gold)] transition-colors rounded-lg hover:bg-[rgba(201,168,76,0.1)]">
+
+                  {/* Open Link */}
+                  <a
+                    href={`${baseUrl}/r/${item.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 transition-colors hover:bg-gray-100"
+                    style={{ color: 'var(--text-secondary)' }}
+                    title="Open"
+                  >
                     <ExternalLink size={13} />
                   </a>
-                  <button onClick={() => setSelectedId(item.id)}
-                    className="p-2 text-[var(--text-secondary)] hover:text-[var(--gold)] transition-colors rounded-lg hover:bg-[rgba(201,168,76,0.1)] flex items-center gap-1">
+
+                  {/* Analytics */}
+                  <button
+                    onClick={() => setSelectedId(item.id)}
+                    className="p-2 transition-colors hover:bg-gray-100 flex items-center gap-1"
+                    style={{ color: 'var(--text-secondary)' }}
+                    title="Analytics"
+                  >
                     <BarChart2 size={13} />
                     <ChevronRight size={11} />
                   </button>
