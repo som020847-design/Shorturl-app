@@ -82,6 +82,7 @@ export default function ShortenForm({ onSuccess }: { onSuccess: () => void }) {
         <label className="block text-xs tracking-[0.2em] uppercase text-[var(--text-secondary)] mb-3 tag-mono">
           ✦ กรอก URL ที่ต้องการย่อ
         </label>
+
         <div className="flex gap-3">
           <input
             type="text"
@@ -91,6 +92,7 @@ export default function ShortenForm({ onSuccess }: { onSuccess: () => void }) {
             placeholder="https://your-very-long-url.com/path/to/page"
             className="input-gold flex-1 px-4 py-3.5 rounded-xl text-sm w-full"
           />
+
           {isSignedIn ? (
             <button
               onClick={handleShorten}
@@ -109,20 +111,6 @@ export default function ShortenForm({ onSuccess }: { onSuccess: () => void }) {
             </SignInButton>
           )}
         </div>
-
-        {!isSignedIn && (
-          <div className="mt-4 p-4 rounded-xl border border-dashed border-[var(--border)] text-center">
-            <Lock size={20} className="mx-auto mb-2 text-[var(--gold)] opacity-60" />
-            <p className="text-sm text-[var(--text-secondary)]">
-              <SignInButton mode="modal">
-                <button className="text-[var(--gold)] hover:text-[var(--gold-light)] underline underline-offset-2 transition-colors">
-                  เข้าสู่ระบบ
-                </button>
-              </SignInButton>
-              {' '}เพื่อดู Short URL และ QR Code ของคุณ
-            </p>
-          </div>
-        )}
       </div>
 
       {result && isSignedIn && (
@@ -132,17 +120,36 @@ export default function ShortenForm({ onSuccess }: { onSuccess: () => void }) {
               <p className="text-xs tracking-[0.2em] uppercase text-[var(--text-secondary)] mb-4 tag-mono">
                 ✦ Short URL ของคุณ
               </p>
-              <div className="flex items-center gap-2 p-3 rounded-xl bg-[rgba(201,168,76,0.05)] border border-[var(--border)] mb-3">
-                <span className="flex-1 text-[var(--gold)] tag-mono text-sm truncate">{result.shortUrl}</span>
-                <button onClick={() => copyToClipboard(result.shortUrl)}
-                  className="p-2 hover:text-[var(--gold)] text-[var(--text-secondary)] transition-colors rounded-lg hover:bg-[rgba(201,168,76,0.1)]">
+
+              <div className="flex items-center gap-2 p-3 rounded-xl bg-[rgba(201,168,76,0.05)] border border-[var(--border)] mb-3 hover:bg-[rgba(201,168,76,0.1)] transition">
+                
+                {/* 🔥 เปลี่ยนจาก span เป็น a */}
+                <a
+                  href={result.shortUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 text-[var(--gold)] tag-mono text-sm truncate hover:underline"
+                >
+                  {result.shortUrl}
+                </a>
+
+                <button
+                  onClick={() => copyToClipboard(result.shortUrl)}
+                  className="p-2 hover:text-[var(--gold)] text-[var(--text-secondary)] transition-colors rounded-lg hover:bg-[rgba(201,168,76,0.1)]"
+                >
                   <Copy size={15} />
                 </button>
-                <a href={result.shortUrl} target="_blank" rel="noopener noreferrer"
-                  className="p-2 hover:text-[var(--gold)] text-[var(--text-secondary)] transition-colors rounded-lg hover:bg-[rgba(201,168,76,0.1)]">
+
+                <a
+                  href={result.shortUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 hover:text-[var(--gold)] text-[var(--text-secondary)] transition-colors rounded-lg hover:bg-[rgba(201,168,76,0.1)]"
+                >
                   <ExternalLink size={15} />
                 </a>
               </div>
+
               <div className="divider-gold my-4" />
               <p className="text-xs text-[var(--text-secondary)] tag-mono mb-1">URL ต้นฉบับ:</p>
               <p className="text-xs text-[var(--text-secondary)] truncate opacity-60">{url}</p>
@@ -152,11 +159,21 @@ export default function ShortenForm({ onSuccess }: { onSuccess: () => void }) {
               <p className="text-xs tracking-[0.2em] uppercase text-[var(--text-secondary)] mb-4 tag-mono self-start">
                 ✦ QR Code
               </p>
+
               <div className="p-4 rounded-xl bg-[#070709] border border-[var(--border)] float-animation">
-                <Image src={result.qrCode} alt="QR Code" width={160} height={160} className="rounded-lg" />
+                <Image
+                  src={result.qrCode}
+                  alt="QR Code"
+                  width={160}
+                  height={160}
+                  className="rounded-lg"
+                />
               </div>
-              <button onClick={downloadQR}
-                className="mt-3 flex items-center gap-2 text-xs text-[var(--text-secondary)] hover:text-[var(--gold)] transition-colors tag-mono">
+
+              <button
+                onClick={downloadQR}
+                className="mt-3 flex items-center gap-2 text-xs text-[var(--text-secondary)] hover:text-[var(--gold)] transition-colors tag-mono"
+              >
                 <QrCode size={12} />
                 ดาวน์โหลด QR Code
               </button>
